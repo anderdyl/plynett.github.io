@@ -213,6 +213,8 @@ function addBoundaryDescription(direction, boundaryType, container) {
         boundaryDescription = `${direction} Boundary: Incoming Wave`;
     } else if (boundaryType == 3) {
         boundaryDescription = `${direction} Boundary: Periodic Boundary`;
+    } else if (boundaryType == 5) {
+        boundaryDescription = `${direction} Boundary: Incoming Wave, Absorbing`;
     }
 
     // Use the utility function to add the text to the container

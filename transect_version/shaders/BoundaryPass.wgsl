@@ -287,6 +287,19 @@ fn main(@builtin(global_invocation_id) id: vec3<u32>) {
         }
     }
 
+    // west boundary, type 5: incoming waves plus absorption of outgoing waves
+    // (Flather radiation condition). The outgoing signal is the first evolved cell's
+    // surface minus the incident surface there; it leaves at the long-wave speed,
+    // so reflected infragravity waves are not trapped in the domain.
+    if (globals.west_boundary_type == 5 && idx.x <= 2) {
+        let inner = vec2<i32>(3, idx.y);
+        let eta_out = textureLoad(txState, inner, 0).x - BoundarySineWave(inner, 1, 1, 1).x;
+        let incident = BoundarySineWave(idx, 1, 1, 1);
+        let c = sqrt(globals.boundary_g * max(0.0, -B_here));
+        BCState = vec4<f32>(incident.x + eta_out, incident.y - c * eta_out, 0.0, 0.0);
+        BCState_Sed = zero;
+    }
+
     // east boundary
     if (globals.east_boundary_type == 2 && idx.x >= globals.width - 3) {
         if (globals.incident_wave_type <= 2) { // Sine Waves

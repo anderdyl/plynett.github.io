@@ -103,7 +103,7 @@ function copyTransectWaveDataToTexture(calc_constants, waveData, device, txWaves
             const paddedIndex = (y * requiredBytesPerRow / 4) + x * 4; // Adjust the index for padding
             paddedFlatData[paddedIndex] = waveData[x][y];  // red, amplitude
             paddedFlatData[paddedIndex + 1] = waveData[x][y + calc_constants.HEIGHT];  // green, period
-            paddedFlatData[paddedIndex + 2] = 0.0;  // blue, direction - zeros
+            paddedFlatData[paddedIndex + 2] = waveData[x][y + 3 * calc_constants.HEIGHT] || 0.0;  // blue, direction (optional fourth block)
             paddedFlatData[paddedIndex + 3] = waveData[x][y + 2 * calc_constants.HEIGHT];  // alpha, phases
         }
     }

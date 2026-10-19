@@ -175,10 +175,14 @@ export async function loadTransectWaveData(waveContent, calc_constants) {
         console.log("Server side transect wave data loaded successfully.");
     }
 
-    const TransectWaves = Array.from({ length: calc_constants.numberOfWaves }, () => Array(3 * calc_constants.HEIGHT));
+    // Blocks of HEIGHT rows: amplitudes, periods, phases, and optionally directions
+    // (radians; the transect shader scales the x-flux and x-wavenumber by cos(direction)).
+    const hasDirections = lines.length >= 4 * calc_constants.HEIGHT && lines[3 * calc_constants.HEIGHT].trim().length > 0;
+    const nBlocks = hasDirections ? 4 : 3;
+    const TransectWaves = Array.from({ length: calc_constants.numberOfWaves }, () => Array(4 * calc_constants.HEIGHT).fill(0.0));
 
     // Parse the depth data.
-    for (let y = 0; y < 3 * calc_constants.HEIGHT; y++) {
+    for (let y = 0; y < nBlocks * calc_constants.HEIGHT; y++) {
         // Split each line by spaces or tabs.
         const TransectWavesValues = lines[y].split(/\s+/).filter(Boolean);
 

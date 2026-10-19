@@ -387,7 +387,7 @@ fn fs_main(@location(1) uv: vec2<f32>) -> FragmentOutput {
         var thetap = 180.;
 
         var light_x = 0.5 * width;
-        if(globals.west_boundary_type == 2){
+        if(globals.west_boundary_type == 2 || globals.west_boundary_type == 5){
             light_x =  width;
             thetap = 180.;
         }
